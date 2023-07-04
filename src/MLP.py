@@ -28,7 +28,7 @@ class Perceptron:
 
 # test code
 neuron = Perceptron(inputs=2)
-neuron.set_weights([20, 20, -10])  # OR
+neuron.set_weights([-10, -10, 10])  # NAND
 
 # Challenge: Write your OR weights
 
