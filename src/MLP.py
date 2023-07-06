@@ -173,10 +173,13 @@ print("Training Done")
 #     mse = mse/10.0
 
 # test in terminal
-pattern = []
-pattern = list(map(float, input("Enter 'a b c d e f g': ").strip().split()))
+pattern = [0]
+while(True):
+    pattern = list(map(float, input("Enter 'a b c d e f g': ").strip().split()))
+    if(pattern[0] == -1):
+        break
+    
+    output = mlp.run(pattern)
 
-output = mlp.run(pattern)
-
-# categorise output to digit and print
-print(np.argmax(output))
+    # categorise output to digit and print
+    print(np.argmax(output))
