@@ -88,24 +88,45 @@ class MultiLayerPerceptron:
         # Here you have it step by step:
 
         # STEP 1: Feed a sample to the network 
-        
+        self.run(x)
+
         # STEP 2: Calculate the MSE
+        squared_error = 0
+        for i in range(len(self.network[-1])):
+            squared_error += np.square(y[i] - self.values[-1][i])
+        MSE = squared_error / self.layers[-1]
 
         # STEP 3: Calculate the output error terms
+        for i in range(len(self.network[-1])):
+            o_k = self.values[-1][i]
+            self.d[-1][i] = o_k * (1 - o_k) * (y[i] - o_k)
 
         # STEP 4: Calculate the error term of each unit on each layer
         for i in reversed(range(1,len(self.network)-1)):
             for h in range(len(self.network[i])):
                 fwd_error = 0.0
                 for k in range(self.layers[i+1]): 
-                    fwd_error += # fill in the blank               
-                self.d[i][h] = # fill in the blank
+                    fwd_error += self.network[i+1][k].weights[h] * self.d[i+1][k]
+                self.d[i][h] = self.values[i][h] * (1 - self.values[i][h]) * fwd_error
 
         # STEPS 5 & 6: Calculate the deltas and update the weights
         for i in range(1,len(self.network)):
             for j in range(self.layers[i]):
+                new_weights = []
                 for k in range(self.layers[i-1]+1):
-                    pass# fill in the blank
+                    delta = self.eta * self.d[i][j]
+
+                    if k == self.layers[i-1]:
+                        delta *= self.bias
+                    elif i == 1:
+                        delta *= x[k]
+                    else:
+                        delta *= self.values[i-1][k]
+
+                    new_weights.append(self.network[i][j].weights[k] + delta)
+
+                self.network[i][j].set_weights(new_weights)
+
         return MSE
 
 
